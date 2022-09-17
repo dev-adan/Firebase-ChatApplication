@@ -1,24 +1,42 @@
-import logo from './logo.svg';
 import './App.css';
+import { Login, Register,Home } from './pages';
+import { Routes,Route } from 'react-router-dom';
+import { useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './firebase/config';
+import { setUser } from './features/chatSlicer';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function App() {
+  const dispatch = useDispatch();
+  const chatslicer = useSelector(state => state.chat)
+  useEffect(() => {
+
+    const unsub = onAuthStateChanged(auth,(user) => {
+      console.log(user)
+          dispatch(setUser(user));
+    })
+
+    return () => {
+      unsub();
+    }
+
+  },[])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    { chatslicer.authIsReady &&
+      <Routes>
+        <Route path='/' element={chatslicer.user ? <Home/> :  <Login/>}/>
+        <Route path='/register' element={chatslicer.user ? <Home/> : <Register/>}/>
+        <Route path='/login' element={chatslicer.user ? <Home/> : <Login/>}/>
+      </Routes>
+      
+      }
     </div>
+
+    
   );
 }
 
