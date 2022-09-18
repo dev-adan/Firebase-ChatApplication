@@ -2,11 +2,11 @@ import './App.css';
 import { Login, Register,Home } from './pages';
 import { Routes,Route } from 'react-router-dom';
 import { useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged} from 'firebase/auth';
 import { auth } from './firebase/config';
 import { setUser } from './features/chatSlicer';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+
 
 function App() {
   const dispatch = useDispatch();
@@ -24,8 +24,12 @@ function App() {
 
   },[])
 
+ 
+
+  
   return (
     <div className="App">
+    
     { chatslicer.authIsReady &&
       <Routes>
         <Route path='/' element={chatslicer.user ? <Home/> :  <Login/>}/>
@@ -34,6 +38,7 @@ function App() {
       </Routes>
       
       }
+
     </div>
 
     
