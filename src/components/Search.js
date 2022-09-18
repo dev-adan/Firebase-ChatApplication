@@ -45,28 +45,26 @@ const Search = () => {
     try{
 
       if(!res.exists() && user.uid !== loggedUser.uid){
-        console.log('checking')
        
-
         await setDoc(doc(db,'chats',combinedId), {messages : []});
 
-        await updateDoc(doc(db,'userChats',user.uid),{
+        await updateDoc(doc(db,'userChats',loggedUser.uid),{
           [combinedId+".userInfo"] : {
             uid : user.uid,
             displayName : user.displayName,
             photoURL : user.photoURL
           },
-          [combinedId+".data"] : serverTimestamp()
+          [combinedId+".date"] : serverTimestamp()
 
         })
 
-        await updateDoc(doc(db,'userChats',loggedUser.uid),{
+        await updateDoc(doc(db,'userChats',user.uid),{
           [combinedId+".userInfo"] : {
             uid : loggedUser.uid,
             displayName : loggedUser.displayName,
             photoURL : loggedUser.photoURL
           },
-          [combinedId+".data"] : serverTimestamp()
+          [combinedId+".date"] : serverTimestamp()
 
         })
 
@@ -77,12 +75,15 @@ const Search = () => {
       console.log(error)
     }
 
+    setUser(null);
+    setUserName('')
+
   }
 
   return (
     <div className='search'>
         <div className='searchForm'>
-            <input type='text' placeholder='find a user' onKeyDown={handleKey} onChange={e => setUserName(e.target.value)}/>
+            <input value={userName} type='text' placeholder='find a user' onKeyDown={handleKey} onChange={e => setUserName(e.target.value)}/>
         </div>
         
         {error && <span>Something went wrong.</span>}

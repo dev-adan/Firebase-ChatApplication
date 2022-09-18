@@ -1,16 +1,22 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 
-const Message = () => {
+
+const Message = ({message}) => {
+  const loggeduser = useSelector(state => state.chat.user)
+  const chatuser = useSelector(state => state.chat.chatUser)
+
+
   return (
-    <div className='message'>
+    <div className={`message ${message.senderId === loggeduser.uid && 'owner'}`}>
       <div className='messageInfo'>
-        <img src='https://avatars.dicebear.com/api/adventurer/your-custom-seed.svg' alt='message'/>
+        <img src={message.senderId === loggeduser.uid ? loggeduser.photoURL : chatuser.photoURL } alt='message'/>
         <span>just now</span>
       </div>
 
       <div className='messageContent'>
-        <p>hello, what are you doing now adays</p>
-        {/* <img src='https://avatars.dicebear.com/api/adventurer/your-custom-seed.svg' alt=''/> */}
+       {message.text && <p>{message.text}</p> }
+        {message.img && <img style={{height : '150px',width : 'auto'}} src={message.img} alt=''/> }
       </div>
 
     </div>

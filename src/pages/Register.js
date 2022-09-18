@@ -26,8 +26,6 @@ const Register = () => {
 
 
        uploadImage.on('state_changed',  (snapshot) => {
-
-
        },(error) => console.log(error), () => {
 
         getDownloadURL(uploadImage.snapshot.ref).then((downloadURL) => {
